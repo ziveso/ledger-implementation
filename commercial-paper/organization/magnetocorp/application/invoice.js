@@ -72,7 +72,8 @@ async function main() {
       "invoice",
       "MagnetoCorp",
       "00001",
-      "5000000"
+      "5000000",
+      "Kongza55+"
     );
 
     // process response

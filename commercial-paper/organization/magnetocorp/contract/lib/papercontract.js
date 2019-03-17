@@ -88,7 +88,7 @@ class CommercialPaperContract extends Contract {
      * @param {String} maturityDateTime paper maturity date
      * @param {Integer} faceValue face value of paper
      */
-    async invoice(ctx, issuer, paperNumber, faceValue) {
+    async invoice(ctx, issuer, paperNumber, faceValue, supplier) {
         console.log("================invoice====================");
         // create an instance of the paper
         let paper = CommercialPaper.createInstance(
@@ -101,7 +101,7 @@ class CommercialPaperContract extends Contract {
         paper.setInvoiced();
 
         // Newly issued paper is owned by the issuer
-        paper.setOwner(issuer);
+        paper.setOwner(supplier);
 
         // Add the paper to the list of all similar commercial papers in the ledger world state
         await ctx.paperList.addPaper(paper);

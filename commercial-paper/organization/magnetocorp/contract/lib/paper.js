@@ -55,6 +55,10 @@ class CommercialPaper extends State {
         this.currentState = cpState.ISSUED;
     }
 
+    setSupplier(supplier) {
+        this.supplier = supplier;
+    }
+
     setTrading() {
         this.currentState = cpState.TRADING;
     }
