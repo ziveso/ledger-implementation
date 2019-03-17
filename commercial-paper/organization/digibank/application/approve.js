@@ -64,23 +64,20 @@ async function main() {
       "org.papernet.commercialpaper"
     );
 
-    // buy commercial paper
-    console.log("Submit commercial paper buy transaction.");
+    // approve commercial paper
+    console.log("Submit commercial paper approve transaction.");
 
-    const buyResponse = await contract.submitTransaction(
-      "buy",
-      "MagnetoCorp",
-      "00001",
+    const approveResponse = await contract.submitTransaction(
+      "approve",
       "MagnetoCorp",
       "DigiBank",
-      "4900000",
-      "2020-05-31"
+      "00001"
     );
 
     // process response
-    console.log("Process buy transaction response.");
+    console.log("Process approve transaction response.");
 
-    let paper = CommercialPaper.fromBuffer(buyResponse);
+    let paper = CommercialPaper.fromBuffer(approveResponse);
 
     console.log(
       `${paper.issuer} commercial paper : ${
@@ -99,10 +96,10 @@ async function main() {
 }
 main()
   .then(() => {
-    console.log("Buy program complete.");
+    console.log("approve program complete.");
   })
   .catch(e => {
-    console.log("Buy program exception.");
+    console.log("approve program exception.");
     console.log(e);
     console.log(e.stack);
     process.exit(-1);

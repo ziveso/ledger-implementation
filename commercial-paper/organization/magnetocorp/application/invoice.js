@@ -21,7 +21,8 @@ const { FileSystemWallet, Gateway } = require("fabric-network");
 const CommercialPaper = require("../contract/lib/paper.js");
 
 // A wallet stores a collection of identities for use
-const wallet = new FileSystemWallet("../identity/user/balaji/wallet");
+//const wallet = new FileSystemWallet('../user/isabella/wallet');
+const wallet = new FileSystemWallet("../identity/user/isabella/wallet");
 
 // Main program function
 async function main() {
@@ -32,7 +33,7 @@ async function main() {
   try {
     // Specify userName for network access
     // const userName = 'isabella.issuer@magnetocorp.com';
-    const userName = "Admin@org1.example.com";
+    const userName = "User1@org1.example.com";
 
     // Load connection profile; will be used to locate a gateway
     let connectionProfile = yaml.safeLoad(
@@ -64,28 +65,25 @@ async function main() {
       "org.papernet.commercialpaper"
     );
 
-    // buy commercial paper
-    console.log("Submit commercial paper buy transaction.");
+    // issue commercial paper
+    console.log("Submit commercial paper invoice transaction.");
 
-    const buyResponse = await contract.submitTransaction(
-      "buy",
+    const invoicedResponse = await contract.submitTransaction(
+      "invoice",
       "MagnetoCorp",
       "00001",
-      "MagnetoCorp",
-      "DigiBank",
-      "4900000",
-      "2020-05-31"
+      "5000000"
     );
 
     // process response
-    console.log("Process buy transaction response.");
+    console.log("Process issue transaction response.");
 
-    let paper = CommercialPaper.fromBuffer(buyResponse);
+    let paper = CommercialPaper.fromBuffer(invoicedResponse);
 
     console.log(
       `${paper.issuer} commercial paper : ${
         paper.paperNumber
-      } successfully purchased by ${paper.owner}`
+      } successfully invoiced for value ${paper.faceValue}`
     );
     console.log("Transaction complete.");
   } catch (error) {
@@ -99,10 +97,10 @@ async function main() {
 }
 main()
   .then(() => {
-    console.log("Buy program complete.");
+    console.log("Issue program complete.");
   })
   .catch(e => {
-    console.log("Buy program exception.");
+    console.log("Issue program exception.");
     console.log(e);
     console.log(e.stack);
     process.exit(-1);

@@ -2,16 +2,18 @@
 SPDX-License-Identifier: Apache-2.0
 */
 
-'use strict';
+"use strict";
 
 // Utility class for ledger state
-const State = require('./../ledger-api/state.js');
+const State = require("./../ledger-api/state.js");
 
 // Enumerate commercial paper state values
 const cpState = {
-    ISSUED: 1,
-    TRADING: 2,
-    REDEEMED: 3
+    INVOICED: 0,
+    APPROVED: 1,
+    ISSUED: 2,
+    TRADING: 3,
+    REDEEMED: 4
 };
 
 /**
@@ -19,7 +21,6 @@ const cpState = {
  * Class will be used by application and smart contract to define a paper
  */
 class CommercialPaper extends State {
-
     constructor(obj) {
         super(CommercialPaper.getClass(), [obj.issuer, obj.paperNumber]);
         Object.assign(this, obj);
@@ -27,7 +28,7 @@ class CommercialPaper extends State {
 
     /**
      * Basic getters and setters
-    */
+     */
     getIssuer() {
         return this.issuer;
     }
@@ -47,7 +48,10 @@ class CommercialPaper extends State {
     /**
      * Useful methods to encapsulate commercial paper states
      */
-    setIssued() {
+    setIssued(issueDateTime, maturityDateTime) {
+        this.issueDateTime = issueDateTime;
+        this.maturityDateTime = maturityDateTime;
+
         this.currentState = cpState.ISSUED;
     }
 
@@ -57,6 +61,19 @@ class CommercialPaper extends State {
 
     setRedeemed() {
         this.currentState = cpState.REDEEMED;
+    }
+
+    setInvoiced() {
+        this.currentState = cpState.INVOICED;
+    }
+
+    setApproved(approver) {
+        this.approver = approver;
+        this.currentState = cpState.APPROVED;
+    }
+
+    getApprover() {
+        return this.approver;
     }
 
     isIssued() {
@@ -90,12 +107,32 @@ class CommercialPaper extends State {
     /**
      * Factory method to create a commercial paper object
      */
-    static createInstance(issuer, paperNumber, issueDateTime, maturityDateTime, faceValue) {
-        return new CommercialPaper({ issuer, paperNumber, issueDateTime, maturityDateTime, faceValue });
+    // static createInstance(
+    //     issuer,
+    //     paperNumber,
+    //     issueDateTime,
+    //     maturityDateTime,
+    //     faceValue
+    // ) {
+    //     return new CommercialPaper({
+    //         issuer,
+    //         paperNumber,
+    //         issueDateTime,
+    //         maturityDateTime,
+    //         faceValue
+    //     });
+    // }
+
+    static createInstance(issuer, paperNumber, faceValue) {
+        return new CommercialPaper({
+            issuer,
+            paperNumber,
+            faceValue
+        });
     }
 
     static getClass() {
-        return 'org.papernet.commercialpaper';
+        return "org.papernet.commercialpaper";
     }
 }
 
